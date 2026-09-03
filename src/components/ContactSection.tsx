@@ -17,7 +17,7 @@ export function ContactSection() {
     <section id="contact" ref={sectionRef} className="px-4 md:px-8 py-12">
       <motion.div
         style={{ scale, borderRadius }}
-        className="max-w-[1600px] mx-auto bg-dark text-white py-24 md:py-32 px-10 md:px-20 relative overflow-hidden"
+        className="max-w-[1600px] mx-auto bg-dark text-white py-16 md:py-32 px-6 md:px-20 relative overflow-hidden"
       >
         {/* Glow */}
         <Parallax speed={0.05} className="absolute -top-20 -right-20 pointer-events-none">
@@ -38,26 +38,27 @@ export function ContactSection() {
 
         <div className="relative z-10 max-w-3xl">
           <Reveal>
-            <h2 className="font-display font-bold text-5xl md:text-6xl lg:text-7xl tracking-tight mb-8 leading-[1.05]">
+            <h2 className="font-display font-bold text-4xl sm:text-5xl md:text-6xl lg:text-7xl tracking-tight mb-6 md:mb-8 leading-[1.1]">
               Let's Build Something People Notice
             </h2>
           </Reveal>
 
           <Reveal delay={0.15}>
-            <p className="text-white/50 text-xl md:text-2xl mb-14 max-w-xl leading-relaxed">
+            <p className="text-white/50 text-lg sm:text-xl md:text-2xl mb-10 md:mb-14 max-w-xl leading-relaxed">
               No forms. No back and forth. Just write to us.
             </p>
           </Reveal>
 
           <Reveal delay={0.3}>
             <Magnetic strength={0.12}>
-              <a
+              <motion.a
                 href="mailto:hello@wowtecho.com"
-                className="group inline-flex items-center gap-4 bg-accent text-dark rounded-full px-10 py-5 text-lg font-medium hover:bg-white transition-colors duration-500 shadow-2xl"
+                whileTap={{ scale: 0.92, transition: { type: "spring", stiffness: 500, damping: 12 } }}
+                className="group inline-flex items-center gap-3 md:gap-4 bg-accent text-dark rounded-full px-6 py-4 md:px-10 md:py-5 text-base md:text-lg font-medium hover:bg-white transition-colors duration-500 shadow-2xl break-all sm:break-normal max-w-full"
               >
-                hello@wowtecho.com
-                <ArrowUpRight className="w-5 h-5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-              </a>
+                <span className="truncate">hello@wowtecho.com</span>
+                <ArrowUpRight className="w-5 h-5 shrink-0 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+              </motion.a>
             </Magnetic>
           </Reveal>
         </div>

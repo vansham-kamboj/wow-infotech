@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import { Reveal, StaggerContainer } from './Reveal';
 import { Search, Lightbulb, ShieldCheck, ArrowRight } from 'lucide-react';
 
@@ -56,13 +57,14 @@ export function ProcessSection() {
 
                 {/* Bottom Button - Styled like Navbar */}
                 <div>
-                  <a
+                  <motion.a
                     href="#contact"
+                    whileTap={{ scale: 0.92, transition: { type: "spring", stiffness: 500, damping: 12 } }}
                     className="inline-flex items-center justify-between min-w-[160px] px-6 py-3 rounded-full bg-[#12110F] text-white font-medium text-sm hover:bg-[#F5B301] hover:text-[#12110F] transition-colors duration-500 shadow-sm group/btn"
                   >
                     <span>{step.btnText}</span>
                     <ArrowRight className="w-4 h-4 text-white group-hover/btn:text-[#12110F] group-hover/btn:translate-x-1 transition-all duration-500" />
-                  </a>
+                  </motion.a>
                 </div>
               </div>
             );

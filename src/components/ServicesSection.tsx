@@ -1,5 +1,21 @@
-import { StaggerContainer, StaggerItem, Reveal } from './Reveal';
+import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
+
+const ease: [number, number, number, number] = [0.16, 1, 0.3, 1];
+
+const flyFromLeft = (delay = 0) => ({
+  initial: { opacity: 0, x: -120, filter: 'blur(12px)' },
+  whileInView: { opacity: 1, x: 0, filter: 'blur(0px)' },
+  viewport: { once: true, amount: 0.2 },
+  transition: { duration: 0.85, ease, delay },
+});
+
+const flyFromRight = (delay = 0) => ({
+  initial: { opacity: 0, x: 120, filter: 'blur(12px)' },
+  whileInView: { opacity: 1, x: 0, filter: 'blur(0px)' },
+  viewport: { once: true, amount: 0.1 },
+  transition: { duration: 0.85, ease, delay },
+});
 
 const services = [
   {
@@ -29,44 +45,41 @@ const services = [
   },
 ];
 
-
-
 export function ServicesSection() {
   return (
-    <section id="services" className="px-4 md:px-8 py-24 bg-white relative">
+    <section id="services" className="px-4 md:px-8 py-24 bg-white relative overflow-hidden">
       <div className="max-w-[1600px] mx-auto">
         
-        {/* Header Area */}
-        <Reveal className="mb-16 max-w-2xl">
+        {/* Header Area — Flying in from LEFT */}
+        <motion.div {...flyFromLeft(0.1)} className="mb-16 max-w-2xl">
           <p className="text-accent font-medium mb-3 uppercase tracking-wider text-sm">What we do</p>
           <h2 className="font-display font-bold text-4xl md:text-[3.5rem] tracking-tight uppercase text-[#12110F] leading-tight">
             Everything your brand needs to grow
           </h2>
-        </Reveal>
+        </motion.div>
 
         {/* Divider */}
-        <Reveal>
+        <motion.div {...flyFromLeft(0.2)}>
           <div className="w-full h-[1px] bg-gray-200 mb-16" />
-        </Reveal>
+        </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8">
-          {/* Left Text */}
-          <div className="lg:col-span-4">
-            <Reveal delay={0.1}>
-              <p className="text-gray-800 font-medium text-[15px] leading-relaxed max-w-[90%]">
-                Wow Techo empowers founders, businesses and institutions across industries, both local and global, to build anything they want, any way they want. Take control with the best custom digital solutions and supportive marketing team at Wow Techo.
-              </p>
-            </Reveal>
-          </div>
+          {/* Left Text — Flying in from LEFT */}
+          <motion.div {...flyFromLeft(0.3)} className="lg:col-span-4">
+            <p className="text-gray-800 font-medium text-[15px] leading-relaxed max-w-[90%]">
+              Wow Techo empowers founders, businesses and institutions across industries, both local and global, to build anything they want, any way they want. Take control with the best custom digital solutions and supportive marketing team at Wow Techo.
+            </p>
+          </motion.div>
 
-          {/* Right Cards Grid */}
+          {/* Right Cards Grid — Flying in from RIGHT */}
           <div className="lg:col-span-8">
-            <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {services.map((service, idx) => {
                 return (
-                  <StaggerItem key={idx} className="col-span-1">
-                    <a
+                  <motion.div key={idx} {...flyFromRight(0.15 + idx * 0.12)} className="col-span-1">
+                    <motion.a
                       href="#contact"
+                      whileTap={{ scale: 0.95, transition: { type: "spring", stiffness: 500, damping: 12 } }}
                       className="group relative flex rounded-2xl overflow-hidden transition-shadow hover:shadow-lg"
                     >
                       {/* Spinning gradient for hover glow */}
@@ -111,11 +124,11 @@ export function ServicesSection() {
                           </div>
                         </div>
                       </div>
-                    </a>
-                  </StaggerItem>
+                    </motion.a>
+                  </motion.div>
                 );
               })}
-            </StaggerContainer>
+            </div>
           </div>
         </div>
       </div>

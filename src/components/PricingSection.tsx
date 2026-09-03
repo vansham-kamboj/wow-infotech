@@ -1,9 +1,19 @@
-import { Reveal, StaggerContainer, StaggerItem } from './Reveal';
+import { motion } from 'framer-motion';
+import { Reveal } from './Reveal';
 import { Check, ArrowRight, Code, LayoutDashboard, TrendingUp } from 'lucide-react';
+
+const ease: [number, number, number, number] = [0.16, 1, 0.3, 1];
+
+const flyFromBottom = (delay: number) => ({
+  initial: { opacity: 0, y: 80, filter: 'blur(12px)' },
+  whileInView: { opacity: 1, y: 0, filter: 'blur(0px)' },
+  viewport: { once: true, amount: 0.15 },
+  transition: { duration: 0.85, ease, delay },
+});
 
 export function PricingSection() {
   return (
-    <section id="pricing" className="px-4 md:px-8 py-24 bg-[#12110F]">
+    <section id="pricing" className="px-4 md:px-8 py-24 bg-[#12110F] overflow-hidden">
       <div className="max-w-[1600px] mx-auto">
         {/* Header */}
         <Reveal className="mb-16 max-w-3xl">
@@ -17,11 +27,11 @@ export function PricingSection() {
           </p>
         </Reveal>
 
-        {/* Pricing Cards */}
-        <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* Pricing Cards — Sequenced Bottom-to-Top Reveal (1 -> 2 -> 3) */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           
-          {/* Card 1: Static Websites */}
-          <StaggerItem>
+          {/* Card 1: Static Websites — Card 1 first */}
+          <motion.div {...flyFromBottom(0.1)}>
             <div className="bg-[#161616] border border-white/10 rounded-[2rem] p-8 h-full flex flex-col hover:shadow-xl transition-shadow duration-500 relative overflow-hidden group hover:border-white/20">
               <div className="absolute top-0 right-0 w-64 h-64 bg-accent/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:bg-accent/10 transition-colors duration-500" />
               
@@ -58,19 +68,20 @@ export function PricingSection() {
               </div>
 
               <div className="relative z-10 mt-auto">
-                <a
+                <motion.a
                   href="#contact"
+                  whileTap={{ scale: 0.92, transition: { type: "spring", stiffness: 500, damping: 12 } }}
                   className="flex items-center justify-between w-full px-6 py-3.5 rounded-full bg-white text-[#12110F] font-medium hover:bg-accent transition-colors duration-500 group/btn"
                 >
                   <span className="text-sm">Start project</span>
                   <ArrowRight className="w-4 h-4 text-[#12110F] group-hover/btn:translate-x-1 transition-all duration-500" />
-                </a>
+                </motion.a>
               </div>
             </div>
-          </StaggerItem>
+          </motion.div>
 
-          {/* Card 2: SEO */}
-          <StaggerItem>
+          {/* Card 2: SEO — Card 2 second */}
+          <motion.div {...flyFromBottom(0.3)}>
             <div className="bg-[#161616] border border-white/10 rounded-[2rem] p-8 h-full flex flex-col hover:shadow-xl transition-shadow duration-500 relative overflow-hidden group hover:border-white/20">
               <div className="absolute top-0 right-0 w-64 h-64 bg-accent/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:bg-accent/10 transition-colors duration-500" />
               
@@ -107,19 +118,20 @@ export function PricingSection() {
               </div>
 
               <div className="relative z-10 mt-auto">
-                <a
+                <motion.a
                   href="#contact"
+                  whileTap={{ scale: 0.92, transition: { type: "spring", stiffness: 500, damping: 12 } }}
                   className="flex items-center justify-between w-full px-6 py-3.5 rounded-full bg-white text-[#12110F] font-medium hover:bg-accent transition-colors duration-500 group/btn"
                 >
                   <span className="text-sm">Rank higher</span>
                   <ArrowRight className="w-4 h-4 text-[#12110F] group-hover/btn:translate-x-1 transition-all duration-500" />
-                </a>
+                </motion.a>
               </div>
             </div>
-          </StaggerItem>
+          </motion.div>
 
-          {/* Card 3: Management Systems */}
-          <StaggerItem>
+          {/* Card 3: Management Systems — Card 3 third */}
+          <motion.div {...flyFromBottom(0.5)}>
             <div className="bg-[#161616] border border-accent/20 rounded-[2rem] p-8 h-full flex flex-col hover:shadow-2xl hover:shadow-accent/10 transition-shadow duration-500 relative overflow-hidden group hover:border-accent/40">
               <div className="absolute top-0 right-0 w-64 h-64 bg-accent/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:bg-accent/20 transition-colors duration-500" />
               
@@ -156,18 +168,19 @@ export function PricingSection() {
               </div>
 
               <div className="relative z-10 mt-auto">
-                <a
+                <motion.a
                   href="#contact"
+                  whileTap={{ scale: 0.92, transition: { type: "spring", stiffness: 500, damping: 12 } }}
                   className="flex items-center justify-between w-full px-6 py-3.5 rounded-full bg-accent text-[#12110F] font-medium hover:bg-white transition-colors duration-500 group/btn"
                 >
                   <span className="text-sm">Get a quote</span>
                   <ArrowRight className="w-4 h-4 text-[#12110F] group-hover/btn:translate-x-1 transition-transform duration-500" />
-                </a>
+                </motion.a>
               </div>
             </div>
-          </StaggerItem>
+          </motion.div>
 
-        </StaggerContainer>
+        </div>
       </div>
     </section>
   );

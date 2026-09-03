@@ -8,6 +8,26 @@ const fadeUp = (delay: number): { initial: { opacity: number; y: number }; anima
   transition: { duration: 0.9, ease, delay },
 });
 
+const flyFromLeft = (delay: number) => ({
+  initial: { opacity: 0, x: -120, filter: 'blur(12px)' },
+  whileInView: { opacity: 1, x: 0, filter: 'blur(0px)' },
+  viewport: { once: true, amount: 0.2 },
+  transition: { duration: 0.85, ease, delay },
+});
+
+const flyFromRight = (delay: number) => ({
+  initial: { opacity: 0, x: 120, filter: 'blur(12px)' },
+  whileInView: { opacity: 1, x: 0, filter: 'blur(0px)' },
+  viewport: { once: true, amount: 0.2 },
+  transition: { duration: 0.85, ease, delay },
+});
+
+const fadeDownCinematic = (delay: number) => ({
+  initial: { opacity: 0, y: -45, filter: 'blur(10px)' },
+  animate: { opacity: 1, y: 0, filter: 'blur(0px)' },
+  transition: { duration: 1.1, ease, delay },
+});
+
 export function HeroSection() {
   return (
     <section className="relative flex flex-col items-center pt-28 md:pt-32 pb-0 overflow-hidden bg-white min-h-screen">
@@ -22,7 +42,7 @@ export function HeroSection() {
       {/* ── Text Block ── */}
       <div className="relative z-20 text-center px-4 max-w-4xl mx-auto">
         <motion.h1
-          {...fadeUp(0.1)}
+          {...fadeDownCinematic(0.1)}
           whileHover={{ scale: 1.04, transition: { duration: 1, ease: 'easeOut' } }}
           className="font-display font-bold text-[2.5rem] sm:text-[3.2rem] md:text-[4rem] leading-[1.05] tracking-tight mb-5 text-[#12110F] cursor-default origin-center"
         >
@@ -59,12 +79,13 @@ export function HeroSection() {
                 placeholder="Your work email" 
                 className="px-4 py-2 bg-transparent outline-none text-sm w-full sm:w-[260px] text-gray-700 placeholder:text-gray-400"
               />
-              <a
+              <motion.a
                 href="mailto:hello@wowtecho.com"
+                whileTap={{ scale: 0.92, transition: { type: "spring", stiffness: 500, damping: 12 } }}
                 className="group/btn inline-flex items-center justify-center gap-2 bg-[#12110F] text-white rounded-full px-6 py-2.5 text-sm font-medium hover:bg-[#F5B301] hover:text-[#12110F] transition-colors duration-500 shrink-0 shadow-[0_2px_10px_rgba(0,0,0,0.1)]"
               >
                 Let's build together
-              </a>
+              </motion.a>
             </div>
           </div>
         </motion.div>
@@ -124,7 +145,7 @@ export function HeroSection() {
 
           {/* Card 1 — Management Systems */}
           <motion.div
-            {...fadeUp(0.6)}
+            {...flyFromLeft(0.1)}
             className="relative md:absolute z-20 md:right-[calc(50%+150px)] md:top-[60px] w-full max-w-[320px]"
           >
             <div className="group bg-white rounded-3xl shadow-[0_4px_24px_rgba(0,0,0,0.06)] border border-[#EAEAE7] p-5 hover:-translate-y-1 transition-transform duration-500 transform md:rotate-[5deg]">
@@ -143,16 +164,16 @@ export function HeroSection() {
               </div>
               <p className="text-[11px] text-[#12110F] mb-5 font-medium">systems running smoothly &amp; scaling</p>
               
-              {/* Bar Chart matching reference */}
+              {/* Bar Chart with animated growing bars */}
               <div className="h-10 w-full flex items-end gap-1">
                 {[40, 65, 50, 80, 60, 90, 75, 85, 70, 95, 60, 70, 85, 90, 75, 65, 80, 50, 60, 95, 100].map((h, i) => (
-                  <div
+                  <motion.div
                     key={i}
-                    className="flex-1 rounded-t-sm bg-gray-200 group-hover:bg-[#F5B301] transition-colors duration-500 ease-out"
-                    style={{ 
-                      height: `${h}%`,
-                      transitionDelay: `${i * 15}ms` 
-                    }}
+                    initial={{ height: '10%', backgroundColor: '#E5E7EB' }}
+                    whileInView={{ height: `${h}%`, backgroundColor: '#F5B301' }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, delay: 0.3 + i * 0.02, ease: "easeOut" }}
+                    className="flex-1 rounded-t-sm group-hover:bg-[#F5B301] transition-colors duration-300"
                   />
                 ))}
               </div>
@@ -161,7 +182,7 @@ export function HeroSection() {
 
           {/* Card 2 — SEO Insights */}
           <motion.div
-            {...fadeUp(0.8)}
+            {...flyFromLeft(0.25)}
             className="relative md:absolute z-30 md:right-[calc(50%+130px)] md:top-[200px] w-full max-w-[260px]"
           >
             <div className="group bg-white rounded-[24px] shadow-[0_12px_40px_rgba(0,0,0,0.12)] border border-[#EAEAE7] p-4 hover:-translate-y-1 transition-transform duration-500 transform md:-rotate-[4deg]">
@@ -173,14 +194,32 @@ export function HeroSection() {
                 <span className="text-[10px] text-gray-500 font-medium">2/6</span>
               </div>
               
-              {/* Stacked inner cards effect */}
+              {/* Stacked inner cards effect with smooth fan-out animation */}
               <div className="relative mt-3">
-                 <div className="absolute inset-x-3 -top-2 h-4 bg-[#fde68a]/40 rounded-t-xl transition-transform duration-500 ease-out group-hover:-translate-y-2 group-hover:scale-[1.02]" />
-                 <div className="absolute inset-x-1.5 -top-1 h-4 bg-[#fcd34d]/60 rounded-t-xl transition-transform duration-500 ease-out group-hover:-translate-y-1 group-hover:scale-[1.01]" />
+                 <motion.div
+                   initial={{ y: 0, scale: 1 }}
+                   whileInView={{ y: -8, scale: 1.02 }}
+                   viewport={{ once: true }}
+                   transition={{ duration: 0.6, delay: 0.5, ease: "easeOut" }}
+                   className="absolute inset-x-3 -top-2 h-4 bg-[#fde68a]/40 rounded-t-xl group-hover:-translate-y-2.5 transition-transform duration-500" 
+                 />
+                 <motion.div
+                   initial={{ y: 0, scale: 1 }}
+                   whileInView={{ y: -4, scale: 1.01 }}
+                   viewport={{ once: true }}
+                   transition={{ duration: 0.6, delay: 0.4, ease: "easeOut" }}
+                   className="absolute inset-x-1.5 -top-1 h-4 bg-[#fcd34d]/60 rounded-t-xl group-hover:-translate-y-1.5 transition-transform duration-500" 
+                 />
                  
                  <div className="relative bg-[#fef3c7] rounded-xl p-5 border border-[#fde68a] transition-transform duration-500 ease-out group-hover:translate-y-0.5">
                     <div className="flex justify-center mb-3 text-[#b45309]">
-                       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transition-transform duration-500 group-hover:scale-110"><path d="M12 20V10"></path><path d="M18 20V4"></path><path d="M6 20v-4"></path></svg>
+                       <motion.svg
+                         animate={{ scale: [1, 1.15, 1] }}
+                         transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                         width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" 
+                       >
+                         <path d="M12 20V10"></path><path d="M18 20V4"></path><path d="M6 20v-4"></path>
+                       </motion.svg>
                     </div>
                     <p className="text-[13px] text-[#92400e] font-medium text-center leading-snug px-2">
                       Rank #1 on Google. We optimize your SEO &amp; social profiles.
@@ -198,21 +237,32 @@ export function HeroSection() {
 
           {/* Card 3 — Reach & Traffic */}
           <motion.div
-            {...fadeUp(0.7)}
+            {...flyFromRight(0.15)}
             className="relative md:absolute z-30 md:left-[calc(50%+130px)] md:top-[50px] w-full max-w-[300px]"
           >
             <div className="group bg-white rounded-3xl shadow-[0_12px_40px_rgba(0,0,0,0.1)] border border-[#EAEAE7] p-5 hover:-translate-y-1 transition-transform duration-500 transform md:-rotate-[5deg]">
               <div className="flex items-center justify-between mb-5">
                 <div className="flex items-center gap-2">
-                  <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 transition-colors duration-500 group-hover:bg-blue-600 group-hover:text-white">
+                  <motion.div
+                    whileInView={{ backgroundColor: '#2563EB', color: '#FFFFFF' }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, delay: 0.4 }}
+                    className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 transition-colors duration-500"
+                  >
                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
-                  </div>
+                  </motion.div>
                   <span className="text-[13px] font-semibold text-[#12110F]">Reach &amp; Traffic</span>
                 </div>
-                <div className="flex items-center gap-1 bg-green-50 border border-green-200 px-2 py-0.5 rounded-full">
+                <motion.div
+                  initial={{ scale: 0.8 }}
+                  whileInView={{ scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: 0.5 }}
+                  className="flex items-center gap-1 bg-green-50 border border-green-200 px-2 py-0.5 rounded-full"
+                >
                   <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-green-600"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
                   <span className="text-[10px] font-bold text-green-700">324%</span>
-                </div>
+                </motion.div>
               </div>
               
               <div className="flex items-baseline gap-2 mb-4">
@@ -223,13 +273,14 @@ export function HeroSection() {
               {/* Animated Growth Graph */}
               <div className="relative h-16 w-full flex items-end justify-between gap-1 mt-2">
                 {[15, 22, 18, 30, 45, 40, 60, 55, 75, 90, 100].map((h, i) => (
-                  <div
+                  <motion.div
                     key={i}
-                    className="w-full bg-[#12110F] rounded-t-sm origin-bottom transform transition-all duration-500 ease-out scale-y-[0.3] group-hover:scale-y-100 opacity-50 group-hover:opacity-100"
-                    style={{ 
-                      height: `${h}%`,
-                      transitionDelay: `${i * 30}ms`
-                    }}
+                    initial={{ scaleY: 0.2, opacity: 0.3 }}
+                    whileInView={{ scaleY: 1, opacity: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, delay: 0.3 + i * 0.03, ease: "easeOut" }}
+                    className="w-full bg-[#12110F] rounded-t-sm origin-bottom"
+                    style={{ height: `${h}%` }}
                   />
                 ))}
               </div>
@@ -238,19 +289,23 @@ export function HeroSection() {
 
           {/* Card 4 — Social Media */}
           <motion.div
-            {...fadeUp(0.9)}
+            {...flyFromRight(0.3)}
             className="relative md:absolute z-20 md:left-[calc(50%+180px)] md:top-[210px] w-full max-w-[240px]"
           >
             <div className="group bg-[#f8fafc] rounded-3xl shadow-[0_4px_24px_rgba(0,0,0,0.06)] border border-[#e2e8f0] p-5 flex flex-col items-center justify-center hover:-translate-y-1 transition-transform duration-500 transform md:rotate-[5deg]">
               <div className="w-full relative aspect-square flex flex-col items-center justify-center">
-                 {/* Clock ticks background */}
-                 <div className="absolute inset-0 w-full h-full transition-transform duration-700 ease-out group-hover:rotate-180 group-hover:scale-110">
-                   <svg className="absolute inset-0 w-full h-full opacity-15" viewBox="0 0 100 100">
+                 {/* Clock ticks background — Continuous Rotating Clock Animation */}
+                 <motion.div
+                   animate={{ rotate: 360 }}
+                   transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+                   className="absolute inset-0 w-full h-full"
+                 >
+                   <svg className="absolute inset-0 w-full h-full opacity-20" viewBox="0 0 100 100">
                       {Array.from({length: 60}).map((_, i) => (
                         <line key={i} x1="50" y1="5" x2="50" y2={i % 5 === 0 ? "11" : "7"} stroke="#0f172a" strokeWidth={i % 5 === 0 ? "1.5" : "1"} transform={`rotate(${i * 6} 50 50)`} />
                       ))}
                    </svg>
-                 </div>
+                 </motion.div>
                  
                  <div className="z-10 text-center transform transition-transform duration-500 group-hover:scale-110">
                     <div className="text-[2.5rem] font-display font-bold text-[#0f172a] mb-1 tracking-tight">
@@ -260,13 +315,18 @@ export function HeroSection() {
                       Social media<br/>managed
                     </p>
                     
-                    <div className="mt-5 flex items-center justify-center gap-4 text-slate-400 transition-colors duration-500 group-hover:text-blue-500">
+                    <motion.div
+                      whileInView={{ color: '#3B82F6' }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.6, delay: 0.5 }}
+                      className="mt-5 flex items-center justify-center gap-4 text-slate-400"
+                    >
                        <span className="text-[10px] transform transition-transform group-hover:-translate-x-1">◁</span>
-                       <div className="w-7 h-7 rounded-full border border-slate-300 group-hover:border-blue-500 flex items-center justify-center text-slate-600 group-hover:text-blue-600 font-bold text-[10px] transition-all">
+                       <div className="w-7 h-7 rounded-full border border-blue-500 flex items-center justify-center text-blue-600 font-bold text-[10px] shadow-sm">
                           II
                        </div>
                        <span className="text-[10px] transform transition-transform group-hover:translate-x-1">▷</span>
-                    </div>
+                    </motion.div>
                  </div>
               </div>
             </div>
