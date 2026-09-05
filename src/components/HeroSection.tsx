@@ -1,4 +1,5 @@
 import { motion, type Transition } from 'framer-motion';
+import { useState } from 'react';
 
 /* ─── Entrance variants ─── */
 const ease: [number, number, number, number] = [0.16, 1, 0.3, 1];
@@ -29,14 +30,68 @@ const fadeDownCinematic = (delay: number) => ({
 });
 
 export function HeroSection() {
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [isHovering, setIsHovering] = useState(false);
+
   return (
-    <section className="relative flex flex-col items-center pt-28 md:pt-32 pb-0 overflow-hidden bg-white min-h-screen">
+    <section 
+      className="relative flex flex-col items-center pt-28 md:pt-32 pb-0 overflow-hidden bg-white min-h-screen"
+      onMouseMove={(e) => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        setMousePosition({
+          x: e.clientX - rect.left,
+          y: e.clientY - rect.top,
+        });
+      }}
+      onMouseEnter={() => setIsHovering(true)}
+      onMouseLeave={() => setIsHovering(false)}
+    >
       
-      {/* ── Background Concentric Circles ── */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[200vw] max-w-[1200px] aspect-square pointer-events-none opacity-20">
-        <div className="absolute inset-0 rounded-full border border-dashed border-gray-400 scale-50" />
-        <div className="absolute inset-0 rounded-full border border-dashed border-gray-400 scale-75" />
-        <div className="absolute inset-0 rounded-full border border-dashed border-gray-400 scale-100" />
+      {/* ── Animated Flowing Lines Background ── */}
+      <div 
+        className="absolute inset-0 z-0 pointer-events-none overflow-hidden flex flex-col justify-center items-center transition-opacity duration-500"
+        style={{
+          opacity: isHovering ? 1 : 0,
+          WebkitMaskImage: `radial-gradient(circle 450px at ${mousePosition.x}px ${mousePosition.y}px, black 10%, transparent 100%)`,
+          maskImage: `radial-gradient(circle 450px at ${mousePosition.x}px ${mousePosition.y}px, black 10%, transparent 100%)`,
+        }}
+      >
+        
+        <div className="flex flex-col gap-12 md:gap-20 w-[150vw] rotate-[-2deg] md:rotate-[-1deg] scale-110 opacity-70">
+          {[
+            { duration: 5, delay: 0, colorL: "via-indigo-500", colorR: "via-purple-500", h: "h-[2px]" },
+            { duration: 7, delay: 1.2, colorL: "via-amber-500", colorR: "via-pink-500", h: "h-[3px]" },
+            { duration: 6, delay: 0.5, colorL: "via-blue-500", colorR: "via-indigo-500", h: "h-[2px]" },
+            { duration: 8, delay: 2, colorL: "via-pink-500", colorR: "via-amber-500", h: "h-[3px]" },
+            { duration: 5.5, delay: 1, colorL: "via-purple-500", colorR: "via-blue-500", h: "h-[2px]" },
+            { duration: 6.5, delay: 2.5, colorL: "via-amber-500", colorR: "via-indigo-500", h: "h-[2px]" },
+          ].map((line, i) => (
+            <div key={i} className="flex w-full items-center relative">
+              {/* Subtle track line */}
+              <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 bg-gray-200/60 w-full h-[1px]" />
+              
+              {/* Left Side Flow */}
+              <div className="w-1/2 h-[6px] relative overflow-hidden">
+                <motion.div
+                  className={`absolute top-1/2 -translate-y-1/2 w-[70%] ${line.h} bg-gradient-to-r from-transparent ${line.colorL} to-transparent blur-[1px]`}
+                  initial={{ left: '-100%' }}
+                  animate={{ left: '100%' }}
+                  transition={{ duration: line.duration, repeat: Infinity, ease: 'linear', delay: line.delay }}
+                />
+              </div>
+
+              {/* Right Side Flow */}
+              <div className="w-1/2 h-[6px] relative overflow-hidden">
+                <motion.div
+                  className={`absolute top-1/2 -translate-y-1/2 w-[70%] ${line.h} bg-gradient-to-l from-transparent ${line.colorR} to-transparent blur-[1px]`}
+                  initial={{ right: '-100%' }}
+                  animate={{ right: '100%' }}
+                  transition={{ duration: line.duration, repeat: Infinity, ease: 'linear', delay: line.delay + 0.5 }}
+                />
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* ── Text Block ── */}
